@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}View Data{% endblock %}
+
+{% block content %}
+<h2>View Submitted Data</h2>
+
+<!-- Filter & Limit Controls -->
+<div id="filters-section">
+    <div class="filter-label">
+        <label for="limit">Limit Results To:</label>
+        <input type="number" id="limit" placeholder="Enter a number">
+    </div>
+
+    <div class="filter-label">
+        <label>Filter Columns:</label>
+        <fieldset>
+            <div class="checkbox-container">
+                <label>
+                    <input type="checkbox" id="select-all" onchange="toggleAllColumns()"> Show All
+                </label>
+                <label>
+                    <input type="checkbox" class="column-filter" value="id" onchange="uncheckShowAll()"
+                        {% if "id" in selected_columns %}checked{% endif %}> Column 1 (ID)
+                </label>
+                <label>
+                    <input type="checkbox" class="column-filter" value="name" onchange="uncheckShowAll()"
+                        {% if "name" in selected_columns %}checked{% endif %}> Column 2 (Name)
+                </label>
+                <label>
+                    <input type="checkbox" class="column-filter" value="email" onchange="uncheckShowAll()"
+                        {% if "email" in selected_columns %}checked{% endif %}> Column 3 (Email)
+                </label>
+                <label>
+                    <input type="checkbox" class="column-filter" value="message" onchange="uncheckShowAll()"
+                        {% if "message" in selected_columns %}checked{% endif %}> Column 4 (Message)
+                </label>
+                <label>
+                    <input type="checkbox" class="column-filter" value="timestamp" onchange="uncheckShowAll()"
+                        {% if "timestamp" in selected_columns %}checked{% endif %}> Column 5 (Timestamp)
+                </label>
+            </div>
+        </fieldset>
+    </div>    
+
+    <button onclick="applyFilters()">Apply Filters</button>
+</div>
+
+<!-- Data Table -->
+<table id="data-table">
+    <thead>
+        <tr>
+            {% if "id" in selected_columns %}
+            <th data-column="id" onclick="sortTable('id')">ID</th>
+            {% endif %}
+            {% if "name" in selected_columns %}
+            <th data-column="name" onclick="sortTable('name')">Name</th>
+            {% endif %}
+            {% if "email" in selected_columns %}
+            <th data-column="email" onclick="sortTable('email')">Email</th>
+            {% endif %}
+            {% if "message" in selected_columns %}
+            <th data-column="message" onclick="sortTable('message')">Message</th>
+            {% endif %}
+            {% if "timestamp" in selected_columns %}
+            <th data-column="timestamp" onclick="sortTable('timestamp')">Timestamp</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for response in responses %}
+        <tr>
+            {% if "id" in selected_columns %}
+            <td data-column="id">{{ response.id }}</td>
+            {% endif %}
+            {% if "name" in selected_columns %}
+            <td data-column="name">{{ response.name }}</td>
+            {% endif %}
+            {% if "email" in selected_columns %}
+            <td data-column="email">{{ response.email }}</td>
+            {% endif %}
+            {% if "message" in selected_columns %}
+            <td data-column="message">{{ response.message }}</td>
+            {% endif %}
+            {% if "timestamp" in selected_columns %}
+            <td data-column="timestamp">{{ response.timestamp }}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br>
+<a href="/">Go Back to Form</a>
+
+<script>
+    function toggleAllColumns() {
+        const selectAllCheckbox = document.getElementById("select-all");
+        const columnCheckboxes = document.querySelectorAll(".column-filter");
+
+        if (selectAllCheckbox.checked) {
+            // If "Show All" is checked, deselect all other checkboxes
+            columnCheckboxes.forEach(checkbox => checkbox.checked = false);
+        }
+    }
+
+    function uncheckShowAll() {
+        // If any individual checkbox is selected, uncheck "Show All"
+        document.getElementById("select-all").checked = false;
+    }
+
+    function applyFilters() {
+        const selectedColumns = Array.from(document.querySelectorAll(".column-filter:checked"))
+            .map(checkbox => checkbox.value);
+        const selectAllChecked = document.getElementById("select-all").checked;
+        const limit = document.getElementById("limit").value;
+
+        // Construct URL parameters
+        const params = new URLSearchParams();
+        if (limit) params.set("limit", limit);
+        if (!selectAllChecked) params.set("columns", selectedColumns.join(","));
+
+        // Redirect to the page with selected filters applied
+        window.location.href = "/view-data?" + params.toString();
+    }
+
+    // Function to restore previously selected columns on page load
+    function restoreFilters() {
+        const params = new URLSearchParams(window.location.search);
+        const selectedColumns = params.get("columns") ? params.get("columns").split(",") : [];
+
+        document.querySelectorAll(".column-filter").forEach(checkbox => {
+            checkbox.checked = selectedColumns.includes(checkbox.value);
+        });
+
+        // If all checkboxes are checked, check "Show All"
+        if (selectedColumns.length === 0 || selectedColumns.length === document.querySelectorAll(".column-filter").length) {
+            document.getElementById("select-all").checked = true;
+        }
+    }
+
+    // Run restoreFilters on page load
+    window.onload = restoreFilters;
+</script>
+
+{% endblock %}

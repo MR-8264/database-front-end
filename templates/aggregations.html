@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Aggregated Data{% endblock %}
+
+{% block content %}
+    <h2>Data Aggregation Results</h2>
+
+    <h3>Total Responses:</h3>
+    <p>{{ total_responses }}</p>
+
+    <h3>Responses Per Email:</h3>
+    <table>
+        <tr>
+            <th>Email</th>
+            <th>Number of Responses</th>
+        </tr>
+        {% for email, count in email_counts %}
+        <tr>
+            <td>{{ email }}</td>
+            <td>{{ count }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>Most Common Words in Messages:</h3>
+    <ul>
+        {% for word, count in common_words %}
+        <li>{{ word }}: {{ count }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Filter Responses by Date:</h3>
+    <form method="GET" action="/aggregations">
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date" required>
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date" name="end_date" required>
+        <button type="submit">Filter</button>
+    </form>
+
+    {% if filtered_responses is not none %}
+    <h3>Responses in Date Range:</h3>
+    <p>{{ filtered_responses }}</p>
+    {% endif %}
+
+    <br>
+    <a href="/">Go Back to Form</a>
+{% endblock %}

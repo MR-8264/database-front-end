@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Submitted Responses{% endblock %}
+
+{% block content %}
+    <h2>Submitted Responses</h2>
+    
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Message</th>
+        </tr>
+        {% for response in responses %}
+        <tr>
+            <td>{{ response.id }}</td>
+            <td>{{ response.name }}</td>
+            <td>{{ response.email }}</td>
+            <td>{{ response.message }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="/aggregations">View Aggregated Data</a>
+    <br>
+    <a href="/">Go Back to Form</a>
+{% endblock %}
