@@ -14,12 +14,6 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST")
 DB_NAME = os.getenv("DB_NAME")
 
-# ✅ Debugging: Print environment variables AFTER assigning them
-print(f"DB_USERNAME: {DB_USERNAME}")
-print(f"DB_PASSWORD: {DB_PASSWORD}")
-print(f"DB_HOST: {DB_HOST}")
-print(f"DB_NAME: {DB_NAME}")
-
 app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = os.getenv("SQLALCHEMY_TRACK_MODIFICATIONS", "False") == "True"
 
