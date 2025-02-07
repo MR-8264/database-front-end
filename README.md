@@ -1,13 +1,13 @@
 # Flask Form Submission and Data Viewer
 
 ## Overview
-This Flask-based web application allows users to submit responses through a form and view submitted data in a structured format. The app connects to a MySQL database using SQLAlchemy and provides sorting, filtering, and column selection features for viewing the stored responses.
+This Flask-based web application allows users to fill out and submit a form and view the data from all submitted forms. The app connects to a MySQL database using SQLAlchemy and provides sorting, filtering, and column selection features for viewing the stored responses.
 
 ## AI-Assisted Development
 This project was developed as part of a client assignment. Since I had little front-end experience at the time, I relied heavily on AI tools like ChatGPT to guide me through the development process. This project highlights how AI can assist developers in tackling new challenges outside their immediate skillset.
 
 ## Features
-- Form-based user submission (name, email, message)
+- Form-based user submission
 - Stores submissions in a MySQL database
 - Displays stored responses with optional sorting and filtering
 - Supports column selection and limit-based queries
