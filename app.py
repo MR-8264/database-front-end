@@ -8,18 +8,19 @@ load_dotenv()  # Load environment variables from .env
 
 app = Flask(__name__)
 
-# Configure the database
-DB_USERNAME = os.getenv("DB_USERNAME")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_HOST = os.getenv("DB_HOST")
-DB_NAME = os.getenv("DB_NAME")
-DB_PORT = os.getenv("DB_PORT", "3306")
+# Use Railway's provided variable names directly
+DB_USERNAME = os.getenv("MYSQLUSER")  # Railway's default for MySQL user
+DB_PASSWORD = os.getenv("MYSQLPASSWORD")  # Railway's default for password
+DB_HOST = os.getenv("MYSQLHOST")  # Railway's default for host
+DB_NAME = os.getenv("MYSQLDATABASE")  # Railway's default for database name
+DB_PORT = os.getenv("MYSQLPORT", "3306")  # Default MySQL port
 
 app.config["SQLALCHEMY_DATABASE_URI"] = (
     f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+# Initialize the database
 db = SQLAlchemy(app)
 
 # Define the model
